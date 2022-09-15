@@ -44,7 +44,7 @@ require('./app/routers/teman.routers')(app);
 require('./app/routers/foto.routers')(app);
 require('./app/routers/video.routers')(app);
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
   console.log(`server running on http://localhost:${PORT}/`);
