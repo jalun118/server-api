@@ -43,7 +43,7 @@ exports.create = async (req, res) => {
     })
   }
 
-  let linkFoto = await Teman.findOne({ link_original_foto: link_original_foto });
+  let linkFoto = await Foto.findOne({ link_original_foto: link_original_foto });
 
   if (linkFoto) {
     return res.status(409).send({
