@@ -5,7 +5,7 @@ module.exports = (app) => {
 
   router.get('/', videos.findAll);
   router.post('/', validationVideo, runValidation, videos.create);
-  router.get('/:id', validationVideo, runValidation, videos.FindOne);
+  router.get('/:id', videos.FindOne);
   router.put('/:id', videos.update);
   router.delete('/:id', videos.deleteOne);
 
