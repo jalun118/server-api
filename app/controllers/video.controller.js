@@ -138,7 +138,7 @@ exports.FindOne = (req, res) => {
     .then((result) => {
       res.send({
         condition: true,
-        result: { result }
+        result: result
       });
     }).catch((err) => {
       res.status(404).send({
