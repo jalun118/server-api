@@ -16,13 +16,15 @@ exports.findAll = (req, res) => {
           createdAt,
           updatedAt
         }));
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         Result
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err || "error cuy"
       })
     });
@@ -35,16 +37,20 @@ exports.create = async (req, res) => {
   let Nama = await Teman.findOne({ nama: nama });
 
   if (NoAbsen) {
-    return res.status(409).send({
-      condition: false,
+    return res.status(400).send({
+      response: 400,
+      fieldError: "no_absen",
+      status: false,
       message: "No absen sudah ada"
     })
   }
 
   if (Nama) {
-    return res.status(409).send({
-      condition: false,
-      message: "nama sudah ada"
+    return res.status(400).send({
+      response: 400,
+      fieldError: "nama",
+      status: false,
+      message: "Nama sudah ada"
     })
   }
 
@@ -57,13 +63,15 @@ exports.create = async (req, res) => {
 
   teman.save(teman)
     .then((result) => {
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         result
       });
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err.message || "gagal cuy, cek ulang internetnya "
       });
     });
@@ -74,13 +82,15 @@ exports.FindOne = (req, res) => {
 
   Teman.findById(id)
     .then((result) => {
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         result
       });
     }).catch((err) => {
       res.status(404).send({
-        condition: false,
+        response: 404,
+        status: false,
         message: err.message || "gagal cuy, gak ada datanya"
       })
     });;
@@ -93,18 +103,21 @@ exports.update = async (req, res, next) => {
     .then((result) => {
       if (!result) {
         res.status(404).send({
-          condition: false,
+          response: 404,
+          status: false,
           message: "data kosong"
         })
       }
 
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         message: "Berhasil cuy"
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err.message || "gagal mengubah"
       })
     });
@@ -117,18 +130,21 @@ exports.deleteOne = (req, res) => {
     .then((result) => {
       if (!result) {
         res.status(404).send({
-          condition: false,
+          response: 404,
+          status: false,
           message: "data kosong"
         })
       }
 
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         message: "Berhasil di hapus cuy"
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err.message || "gagal menghapus"
       })
     });
@@ -137,13 +153,15 @@ exports.deleteOne = (req, res) => {
 exports.deleteAll = (req, res) => {
   Teman.remove()
     .then((result) => {
-      res.send({
-        condition: true,
-        message: "Berhasil di hapus cuy"
+      res.status(200).send({
+        response: 200,
+        status: true,
+        message: "Berhasil di hapus cuy " + result
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err.message || "gagal menghapus"
       })
     });
