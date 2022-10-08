@@ -18,13 +18,16 @@ exports.findAll = (req, res) => {
           createdAt,
           updatedAt
         }));
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         Result
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        status: false,
+        fieldError: "Foto",
+        response: 409,
         message: err || "error cuy"
       })
     });
@@ -32,25 +35,30 @@ exports.findAll = (req, res) => {
 
 exports.create = async (req, res) => {
   const { link_original_foto, judul, deskripsi } = req.body;
-
   let ft = new URL(link_original_foto);
-  let paramFt = (new URL(link_original_foto)).searchParams;
   let UrlArray = ft.pathname.split('/');
 
   if ((ft.hostname !== 'drive.google.com') && (UrlArray[1] === 'uc' || 'thumbnail')) {
-    return res.send({
-      message: "link gak valid cuy"
+    return res.status(400).send({
+      status: false,
+      fieldError: "link_original_foto",
+      response: 400,
+      message: "Link tidak valid cuy"
     })
   }
 
   let linkFoto = await Foto.findOne({ link_original_foto: link_original_foto });
 
   if (linkFoto) {
-    return res.status(409).send({
-      condition: false,
+    return res.status(400).send({
+      status: false,
+      response: 400,
+      fieldError: "link_original_foto",
       message: "Link sudah sudah ada"
     })
   }
+
+  // const RegExString = /^[A-Za-z\d\s]+$/;
 
   const foto = new Foto({
     id_foto: UrlArray[3],
@@ -63,13 +71,16 @@ exports.create = async (req, res) => {
 
   foto.save(foto)
     .then((result) => {
-      res.send({
-        condition: true,
+      res.status(200).send({
+        status: true,
+        response: 200,
         result
       });
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        status: false,
+        fieldError: "Foto",
+        response: 409,
         message: err.message || "gagal cuy, cek ulang internetnya "
       });
     });
@@ -82,12 +93,15 @@ exports.update = async (req, res) => {
   const { link_original_foto, judul, deskripsi } = req.body;
 
   let ft = new URL(link_original_foto);
-  let paramFt = (new URL(link_original_foto)).searchParams;
+  // let paramFt = (new URL(link_original_foto)).searchParams;
   let UrlArray = ft.pathname.split('/');
 
   if ((ft.hostname !== 'drive.google.com') && (UrlArray[1] === 'uc' || 'thumbnail')) {
-    res.send({
-      message: "link gak valid cuy"
+    res.status(400).send({
+      status: false,
+      fieldError: "link_original_foto",
+      response: 400,
+      message: "Link tidak valid"
     })
   }
 
@@ -102,18 +116,21 @@ exports.update = async (req, res) => {
     .then((result) => {
       if (!result) {
         res.status(404).send({
-          condition: false,
+          response: 404,
+          status: false,
           message: "data kosong"
         })
       }
 
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         message: "Berhasil cuy"
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err.message || "gagal mengubah"
       })
     });
@@ -124,13 +141,15 @@ exports.FindOne = (req, res) => {
 
   Foto.findById(id)
     .then((result) => {
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         result
       });
     }).catch((err) => {
       res.status(404).send({
-        condition: false,
+        response: 404,
+        status: false,
         message: err.message || "gagal cuy, gak ada datanya"
       })
     });
@@ -143,18 +162,21 @@ exports.deleteOne = (req, res) => {
     .then((result) => {
       if (!result) {
         res.status(404).send({
-          condition: false,
+          response: 404,
+          status: false,
           message: "data kosong"
         })
       }
 
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         message: "Berhasil di hapus cuy"
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 409,
+        status: false,
         message: err.message || "gagal menghapus"
       })
     });
@@ -163,13 +185,15 @@ exports.deleteOne = (req, res) => {
 exports.deleteAll = (req, res) => {
   Foto.remove()
     .then((result) => {
-      res.send({
-        condition: true,
+      res.status(200).send({
+        response: 200,
+        status: true,
         message: "Berhasil di hapus cuy"
       })
     }).catch((err) => {
       res.status(409).send({
-        condition: false,
+        response: 400,
+        status: false,
         message: err.message || "gagal menghapus"
       })
     });
