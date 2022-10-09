@@ -27,7 +27,7 @@ exports.validationFoto = [
 ]
 
 exports.validationVideo = [
-  check('link_original_video', 'video Foto harus diisi').notEmpty().matches(RegExUrl).withMessage("bukan link"),
+  check('link_original_video', 'Link Video harus diisi').notEmpty().matches(RegExUrl).withMessage("bukan link"),
   check('judul', 'Judul harus diisi').notEmpty(),
 ]
 
