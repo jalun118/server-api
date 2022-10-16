@@ -33,6 +33,39 @@ exports.findAll = (req, res) => {
     });
 }
 
+exports.FindPages = (req, res, next) => {
+  const currentPage = req.query.page || 1;
+  const perPage = req.query.perpage || 5;
+  let totalItem;
+
+  Foto.find()
+    .countDocuments()
+    .then(count => {
+      totalItem = count;
+      return Foto.find()
+        .skip((currentPage - 1) * perPage)
+        .limit(perPage);
+    })
+    .then(result => {
+      res.status(200).send({
+        response: 200,
+        status: true,
+        result: result,
+        per_page: perPage,
+        current_page: currentPage,
+        All_data: totalItem,
+      })
+    })
+    .catch((err) => {
+      res.status(409).send({
+        status: false,
+        fieldError: "Foto",
+        response: 409,
+        message: err || "error cuy"
+      })
+    });
+}
+
 exports.create = async (req, res) => {
   const { link_original_foto, judul, deskripsi } = req.body;
   let ft = new URL(link_original_foto);

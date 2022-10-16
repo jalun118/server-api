@@ -3,6 +3,7 @@ module.exports = (app) => {
   const router = require('express').Router();
   const { runValidation, validationFoto } = require('../Validation/Validation')
 
+  router.get('/find', fotos.FindPages);
   router.get('/', fotos.findAll);
   router.post('/', validationFoto, runValidation, fotos.create);
   router.put('/:id', validationFoto, runValidation, fotos.update);
