@@ -64,7 +64,7 @@ exports.create = async (req, res) => {
     id_video: UrlArray[3],
     link_thumb: Vd.protocol + "//" + Vd.hostname + '/thumbnail?id=' + UrlArray[3],
     link_video: Vd.protocol + "//" + Vd.hostname + '/uc?export=download&id=' + UrlArray[3] + '&export=download',
-    link_download_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3],
+    link_download_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3] + "&export=download",
     link_original_video: link_original_video,
     judul: judul,
     deskripsi: deskripsi ? deskripsi : null,
