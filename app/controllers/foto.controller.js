@@ -95,7 +95,7 @@ exports.create = async (req, res) => {
 
   const foto = new Foto({
     id_foto: UrlArray[3],
-    link_foto: ft.protocol + "//" + ft.hostname + '/thumbnail?id=' + UrlArray[3],
+    link_foto: ft.protocol + "//" + ft.hostname + "/uc?id=" + UrlArray[3],
     link_download_foto: ft.protocol + "//" + ft.hostname + '/uc?id=' + UrlArray[3] + "&export=download",
     link_original_foto: link_original_foto,
     judul: judul,
@@ -138,9 +138,11 @@ exports.update = async (req, res) => {
     })
   }
 
+  // const ThumbProtocol = "https://lh3.googleusercontent.com/d/";
+
   Foto.findByIdAndUpdate(id, {
     id_foto: UrlArray[3],
-    link_foto: ft.protocol + "//" + ft.hostname + '/thumbnail?id=' + UrlArray[3],
+    link_foto: ft.protocol + "//" + ft.hostname + "/uc?id=" + UrlArray[3],
     link_download_foto: ft.protocol + "//" + ft.hostname + '/uc?id=' + UrlArray[3] + "&export=download",
     link_original_foto: link_original_foto,
     judul: judul,

@@ -60,10 +60,12 @@ exports.create = async (req, res) => {
     })
   }
 
+  const ThumbProtocol = "https://lh3.googleusercontent.com/d/";
+
   const video = new Video({
     id_video: UrlArray[3],
-    link_thumb: Vd.protocol + "//" + Vd.hostname + '/thumbnail?id=' + UrlArray[3],
-    link_video: Vd.protocol + "//" + Vd.hostname + '/uc?export=download&id=' + UrlArray[3] + '&export=download',
+    link_thumb: ThumbProtocol + UrlArray[3] + "=w300-k-nu-iv1",
+    link_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3],
     link_download_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3] + "&export=download",
     link_original_video: link_original_video,
     judul: judul,
@@ -116,11 +118,13 @@ exports.update = async (req, res) => {
     })
   }
 
+  const ThumbProtocol = "https://lh3.googleusercontent.com/d/";
+
   Video.findByIdAndUpdate(id, {
     id_video: UrlArray[3],
-    link_thumb: Vd.protocol + "//" + Vd.hostname + '/thumbnail?id=' + UrlArray[3],
-    link_video: Vd.protocol + "//" + Vd.hostname + '/uc?export=download&id=' + UrlArray[3] + '&export=download',
-    link_download_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3],
+    link_thumb: ThumbProtocol + UrlArray[3] + "=w300-k-nu-iv1",
+    link_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3],
+    link_download_video: Vd.protocol + "//" + Vd.hostname + '/uc?id=' + UrlArray[3] + "&export=download",
     link_original_video: link_original_video,
     judul: judul,
     deskripsi: deskripsi ? deskripsi : null,
