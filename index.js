@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 
 const app = express();
 
@@ -26,19 +25,6 @@ app.get('/', (req, res) => {
     message: "Welcome To my server abal-abal"
   });
 });
-
-const endToken = (req, res, next) => {
-  const bearerHeader = req.headers['authorization'];
-
-  if (typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.sendStatus(403)
-  }
-}
 
 require('./app/routers/teman.routers')(app);
 require('./app/routers/foto.routers')(app);
