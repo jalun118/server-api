@@ -22,4 +22,4 @@ module.exports = (mongoose) => {
 
   const Foto = mongoose.model("foto", schema);
   return Foto;
-}
+};

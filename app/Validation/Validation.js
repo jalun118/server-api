@@ -12,19 +12,19 @@ exports.runValidation = (req, res, next) => {
     });
   }
   next();
-}
+};
 
 exports.validationTeman = [
   check('no_absen', 'No absen harus diisi').notEmpty().isNumeric().withMessage('No absen harus angka'),
   check('nama', 'Nama harus diisi').notEmpty(),
-]
+];
 
 const RegExUrl = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_.~#?&//=]*)/g;
 
 exports.validationFoto = [
   check('link_original_foto', 'Link Foto harus diisi').notEmpty().matches(RegExUrl).withMessage("bukan link"),
   check('judul', 'Judul harus diisi').notEmpty(),
-]
+];
 
 exports.validationVideo = [
   check('link_original_video', 'Link Video harus diisi').notEmpty().matches(RegExUrl).withMessage("bukan link"),

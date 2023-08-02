@@ -23,4 +23,4 @@ module.exports = (mongoose) => {
 
   const Video = mongoose.model("video", schema);
   return Video;
-}
+};

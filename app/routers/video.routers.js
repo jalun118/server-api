@@ -1,7 +1,7 @@
 module.exports = (app) => {
   const videos = require('../controllers/video.controller');
   const router = require('express').Router();
-  const { runValidation, validationVideo } = require('../Validation/Validation')
+  const { runValidation, validationVideo } = require('../Validation/Validation');
 
   router.get('/', videos.findAll);
   router.post('/', validationVideo, runValidation, videos.create);
@@ -10,4 +10,4 @@ module.exports = (app) => {
   router.delete('/:id', videos.deleteOne);
 
   app.use('/api/video', router);
-}
+};

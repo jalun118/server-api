@@ -6,34 +6,23 @@ exports.findAll = (req, res) => {
     .then((result) => {
       const Result = result
         .filter(data => data.createdAt)
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .map(({ id, id_foto, link_foto, link_download_foto, link_original_foto, judul, deskripsi, createdAt, updatedAt }) => ({
-          id,
-          id_foto,
-          link_foto,
-          link_download_foto,
-          link_original_foto,
-          judul,
-          deskripsi,
-          createdAt,
-          updatedAt
-        }));
+        .sort((a, b) => b.createdAt - a.createdAt);
       res.status(200).send({
         response: 200,
         status: true,
         Result
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         status: false,
         fieldError: "Foto",
         response: 409,
         message: err || "error cuy"
-      })
+      });
     });
-}
+};
 
-exports.FindPages = (req, res, next) => {
+exports.FindPages = (req, res) => {
   const currentPage = req.query.page || 1;
   const perPage = req.query.perpage || 5;
   let totalItem;
@@ -54,7 +43,7 @@ exports.FindPages = (req, res, next) => {
         per_page: perPage,
         current_page: currentPage,
         All_data: totalItem,
-      })
+      });
     })
     .catch((err) => {
       res.status(409).send({
@@ -62,14 +51,14 @@ exports.FindPages = (req, res, next) => {
         fieldError: "Foto",
         response: 409,
         message: err || "error cuy"
-      })
+      });
     });
-}
+};
 
 exports.create = async (req, res) => {
   const { link_original_foto, judul, deskripsi } = req.body;
-  let ft = new URL(link_original_foto);
-  let UrlArray = ft.pathname.split('/');
+  const ft = new URL(link_original_foto);
+  const UrlArray = ft.pathname.split('/');
 
   if ((ft.hostname !== 'drive.google.com') && (UrlArray[1] === 'uc' || 'thumbnail')) {
     return res.status(400).send({
@@ -77,10 +66,10 @@ exports.create = async (req, res) => {
       fieldError: "link_original_foto",
       response: 400,
       message: "Link tidak valid cuy"
-    })
+    });
   }
 
-  let linkFoto = await Foto.findOne({ link_original_foto: link_original_foto });
+  const linkFoto = await Foto.findOne({ link_original_foto: link_original_foto });
 
   if (linkFoto) {
     return res.status(400).send({
@@ -88,10 +77,8 @@ exports.create = async (req, res) => {
       response: 400,
       fieldError: "link_original_foto",
       message: "Link sudah sudah ada"
-    })
+    });
   }
-
-  // const RegExString = /^[A-Za-z\d\s]+$/;
 
   const foto = new Foto({
     id_foto: UrlArray[3],
@@ -117,7 +104,7 @@ exports.create = async (req, res) => {
         message: err.message || "gagal cuy, cek ulang internetnya "
       });
     });
-}
+};
 
 
 exports.update = async (req, res) => {
@@ -125,9 +112,8 @@ exports.update = async (req, res) => {
 
   const { link_original_foto, judul, deskripsi } = req.body;
 
-  let ft = new URL(link_original_foto);
-  // let paramFt = (new URL(link_original_foto)).searchParams;
-  let UrlArray = ft.pathname.split('/');
+  const ft = new URL(link_original_foto);
+  const UrlArray = ft.pathname.split('/');
 
   if ((ft.hostname !== 'drive.google.com') && (UrlArray[1] === 'uc' || 'thumbnail')) {
     res.status(400).send({
@@ -135,10 +121,8 @@ exports.update = async (req, res) => {
       fieldError: "link_original_foto",
       response: 400,
       message: "Link tidak valid"
-    })
+    });
   }
-
-  // const ThumbProtocol = "https://lh3.googleusercontent.com/d/";
 
   Foto.findByIdAndUpdate(id, {
     id_foto: UrlArray[3],
@@ -150,26 +134,26 @@ exports.update = async (req, res) => {
   })
     .then((result) => {
       if (!result) {
-        res.status(404).send({
+        return res.status(404).send({
           response: 404,
           status: false,
           message: "data kosong"
-        })
+        });
       }
 
       res.status(200).send({
         response: 200,
         status: true,
         message: "Berhasil cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err.message || "gagal mengubah"
-      })
+      });
     });
-}
+};
 
 exports.FindOne = (req, res) => {
   const id = req.params.id;
@@ -186,9 +170,9 @@ exports.FindOne = (req, res) => {
         response: 404,
         status: false,
         message: err.message || "gagal cuy, gak ada datanya"
-      })
+      });
     });
-}
+};
 
 exports.deleteOne = (req, res) => {
   const id = req.params.id;
@@ -196,40 +180,40 @@ exports.deleteOne = (req, res) => {
   Foto.findByIdAndRemove(id)
     .then((result) => {
       if (!result) {
-        res.status(404).send({
+        return res.status(404).send({
           response: 404,
           status: false,
           message: "data kosong"
-        })
+        });
       }
 
       res.status(200).send({
         response: 200,
         status: true,
         message: "Berhasil di hapus cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err.message || "gagal menghapus"
-      })
+      });
     });
-}
+};
 
 exports.deleteAll = (req, res) => {
   Foto.remove()
-    .then((result) => {
+    .then(() => {
       res.status(200).send({
         response: 200,
         status: true,
         message: "Berhasil di hapus cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 400,
         status: false,
         message: err.message || "gagal menghapus"
-      })
+      });
     });
-}
+};

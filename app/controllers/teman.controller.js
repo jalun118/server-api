@@ -6,35 +6,26 @@ exports.findAll = (req, res) => {
     .then((result) => {
       const Result = result
         .filter(data => data.no_absen)
-        .sort((a, b) => a.no_absen - b.no_absen)
-        .map(({ id, no_absen, nama, kelas, pangkat, createdAt, updatedAt }) => ({
-          id,
-          no_absen,
-          nama,
-          kelas,
-          pangkat,
-          createdAt,
-          updatedAt
-        }));
+        .sort((a, b) => a.no_absen - b.no_absen);
       res.status(200).send({
         response: 200,
         status: true,
         Result
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err || "error cuy"
-      })
+      });
     });
-}
+};
 
 exports.create = async (req, res) => {
   const { no_absen, nama, kelas, pangkat } = req.body;
 
-  let NoAbsen = await Teman.findOne({ no_absen: no_absen });
-  let Nama = await Teman.findOne({ nama: nama });
+  const NoAbsen = await Teman.findOne({ no_absen: no_absen });
+  const Nama = await Teman.findOne({ nama: nama });
 
   if (NoAbsen) {
     return res.status(400).send({
@@ -42,7 +33,7 @@ exports.create = async (req, res) => {
       fieldError: "no_absen",
       status: false,
       message: "No absen sudah ada"
-    })
+    });
   }
 
   if (Nama) {
@@ -51,7 +42,7 @@ exports.create = async (req, res) => {
       fieldError: "nama",
       status: false,
       message: "Nama sudah ada"
-    })
+    });
   }
 
   const teman = new Teman({
@@ -75,7 +66,7 @@ exports.create = async (req, res) => {
         message: err.message || "gagal cuy, cek ulang internetnya "
       });
     });
-}
+};
 
 exports.FindOne = (req, res) => {
   const id = req.params.id;
@@ -92,9 +83,9 @@ exports.FindOne = (req, res) => {
         response: 404,
         status: false,
         message: err.message || "gagal cuy, gak ada datanya"
-      })
+      });
     });;
-}
+};
 
 exports.update = async (req, res, next) => {
   const id = req.params.id;
@@ -102,26 +93,26 @@ exports.update = async (req, res, next) => {
   Teman.findByIdAndUpdate(id, req.body)
     .then((result) => {
       if (!result) {
-        res.status(404).send({
+        return res.status(404).send({
           response: 404,
           status: false,
           message: "data kosong"
-        })
+        });
       }
 
       res.status(200).send({
         response: 200,
         status: true,
         message: "Berhasil cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err.message || "gagal mengubah"
-      })
+      });
     });
-}
+};
 
 exports.deleteOne = (req, res) => {
   const id = req.params.id;
@@ -129,26 +120,26 @@ exports.deleteOne = (req, res) => {
   Teman.findByIdAndRemove(id)
     .then((result) => {
       if (!result) {
-        res.status(404).send({
+        return res.status(404).send({
           response: 404,
           status: false,
           message: "data kosong"
-        })
+        });
       }
 
       res.status(200).send({
         response: 200,
         status: true,
         message: "Berhasil di hapus cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err.message || "gagal menghapus"
-      })
+      });
     });
-}
+};
 
 exports.deleteAll = (req, res) => {
   Teman.remove()
@@ -157,12 +148,12 @@ exports.deleteAll = (req, res) => {
         response: 200,
         status: true,
         message: "Berhasil di hapus cuy " + result
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err.message || "gagal menghapus"
-      })
+      });
     });
-}
+};

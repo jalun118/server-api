@@ -6,39 +6,26 @@ exports.findAll = (req, res) => {
     .then((result) => {
       const Result = result
         .filter(data => data.createdAt)
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .map(({ id, id_video, link_thumb, link_video, link_download_video, link_original_video, judul, deskripsi, createdAt, updatedAt }) => ({
-          id,
-          id_video,
-          link_thumb,
-          link_video,
-          link_download_video,
-          link_original_video,
-          judul,
-          deskripsi,
-          createdAt,
-          updatedAt
-        }));
+        .sort((a, b) => b.createdAt - a.createdAt);
       res.status(200).send({
         response: 200,
         status: true,
         Result
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err || "error cuy"
-      })
+      });
     });
-}
+};
 
 exports.create = async (req, res) => {
   const { link_original_video, judul, deskripsi } = req.body;
 
-  let Vd = new URL(link_original_video);
-  // let paramVd = (new URL(link_original_video)).searchParams;
-  let UrlArray = Vd.pathname.split('/');
+  const Vd = new URL(link_original_video);
+  const UrlArray = Vd.pathname.split('/');
 
   if ((Vd.hostname !== 'drive.google.com') && (UrlArray[1] === 'uc' || 'thumbnail')) {
     return res.status(400).send({
@@ -46,10 +33,10 @@ exports.create = async (req, res) => {
       status: false,
       fieldError: "link_original_video",
       message: "link gak valid cuy"
-    })
+    });
   }
 
-  let linkVideo = await Video.findOne({ link_original_video: link_original_video });
+  const linkVideo = await Video.findOne({ link_original_video: link_original_video });
 
   if (linkVideo) {
     return res.status(409).send({
@@ -57,7 +44,7 @@ exports.create = async (req, res) => {
       fieldError: "link_original_video",
       status: false,
       message: "link sudah ada"
-    })
+    });
   }
 
   const ThumbProtocol = "https://lh3.googleusercontent.com/d/";
@@ -86,17 +73,14 @@ exports.create = async (req, res) => {
         message: err.message || "gagal cuy, cek ulang internetnya "
       });
     });
-}
-
+};
 
 exports.update = async (req, res) => {
-  const id = req.params.id;
-
   const { link_original_video, judul, deskripsi } = req.body;
+  const { id } = req.params;
 
-  let Vd = new URL(link_original_video);
-  // let paramVd = (new URL(link_original_video)).searchParams;
-  let UrlArray = Vd.pathname.split('/');
+  const Vd = new URL(link_original_video);
+  const UrlArray = Vd.pathname.split('/');
 
   if ((Vd.hostname !== 'drive.google.com') && (UrlArray[1] === 'uc' || 'thumbnail')) {
     return res.status(400).send({
@@ -104,10 +88,10 @@ exports.update = async (req, res) => {
       response: 400,
       fieldError: "link_original_video",
       message: "link tidak valid"
-    })
+    });
   }
 
-  let linkVideo = await Video.findOne({ link_original_video: link_original_video });
+  const linkVideo = await Video.findOne({ link_original_video: link_original_video });
 
   if (linkVideo) {
     return res.status(409).send({
@@ -115,7 +99,7 @@ exports.update = async (req, res) => {
       fieldError: "link_original_video",
       status: false,
       message: "link sudah ada"
-    })
+    });
   }
 
   const ThumbProtocol = "https://lh3.googleusercontent.com/d/";
@@ -135,25 +119,25 @@ exports.update = async (req, res) => {
           response: 404,
           status: false,
           message: "data kosong"
-        })
+        });
       }
 
       res.status(200).send({
         status: true,
         response: 200,
         message: "Berhasil cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         status: false,
         response: 409,
         message: err.message || "gagal mengubah"
-      })
+      });
     });
-}
+};
 
 exports.FindOne = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   Video.findById(id)
     .then((result) => {
@@ -162,7 +146,7 @@ exports.FindOne = (req, res) => {
           response: 404,
           status: false,
           message: "Data tidak ditemukan"
-        })
+        });
       }
 
       res.status(200).send({
@@ -175,12 +159,12 @@ exports.FindOne = (req, res) => {
         response: 404,
         status: false,
         message: err.message || "gagal cuy, gak ada datanya"
-      })
+      });
     });
-}
+};
 
 exports.deleteOne = (req, res) => {
-  const id = req.params.id;
+  const { id } = req.params;
 
   Video.findByIdAndRemove(id)
     .then((result) => {
@@ -189,19 +173,19 @@ exports.deleteOne = (req, res) => {
           response: 404,
           status: false,
           message: "data kosong"
-        })
+        });
       }
 
       res.status(200).send({
         response: 200,
         status: true,
         message: "Berhasil di hapus cuy"
-      })
+      });
     }).catch((err) => {
       res.status(409).send({
         response: 409,
         status: false,
         message: err.message || "gagal menghapus"
-      })
+      });
     });
-}
+};
